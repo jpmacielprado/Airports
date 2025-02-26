@@ -6,6 +6,7 @@ package local.jotape.airports.service;
 
 import local.jotape.airports.repositories.AirportRepository;
 import java.util.List;
+import local.jotape.airports.DTO.AirportMinDTO;
 import local.jotape.airports.entities.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,19 @@ public class AirportService {
         public List<Airport> findByCity(String city) {
             List<Airport> result = airportRepository.findByCityIgnoreCase(city);
             return result;
+        }
+        
+        /**Retorna DTO AirportsMinDTO filtrado por Country
+         * 
+         * @param country
+         * @return
+         */
+        public List<AirportMinDTO> findByCountry(String country){
+            List<Airport> resultAirport = airportRepository.findByCountryIgnoreCase(country);
+            
+            List<AirportMinDTO> resultDTO = resultAirport.stream()
+                  .map(x -> new AirportMinDTO(x)).toList();
+            
+            return resultDTO;
         }
 }

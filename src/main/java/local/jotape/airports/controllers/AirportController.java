@@ -2,6 +2,7 @@ package local.jotape.airports.controllers;
      
 import local.jotape.airports.service.AirportService;
 import java.util.List;
+import local.jotape.airports.DTO.AirportMinDTO;
 import local.jotape.airports.entities.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,26 @@ public class AirportController {
             return ResponseEntity.ok(result);
             
         }
+    }
+    
+    /**EndPoint /airports/city/{city name}
+     * @param countryName
+     * @return
+     */
+    @GetMapping("/country/{countryName}")
+    public ResponseEntity<List<AirportMinDTO>> findByCountryIgnoreCase(@PathVariable String countryName) {
+        
+        List<AirportMinDTO> result = airportService.findByCountry(countryName);
+        if (result.isEmpty()) {
+            //ops.. lista vazia
+            //devolve erro 404
+            return ResponseEntity.notFound().build();
+            
+        } else {
+            //ae, tem dados
+            // devolve ok 200
+            return ResponseEntity.ok(result);
+        }
+        
     }
 }
