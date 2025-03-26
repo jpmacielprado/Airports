@@ -3,11 +3,13 @@ package local.jotape.airports.controllers;
 import local.jotape.airports.service.AirportService;
 import java.util.List;
 import local.jotape.airports.DTO.AirportMinDTO;
+import local.jotape.airports.DTO.AirportNearMeDTO;
 import local.jotape.airports.entities.Airport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -79,6 +81,34 @@ public class AirportController {
             
         } else{
             //Tem dados
+            //ok devolve 200
+            return ResponseEntity.ok(result);
+        }
+    }
+    
+    /**
+     * Endpoint /airports/nearme
+     * Retorna os aeroportos proxímos a coordenado enviada no parâmetro
+     * de requisição GET
+     * 
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    @GetMapping("/nearme")
+    public ResponseEntity<List<AirportNearMeDTO>> findNearMe(
+            @RequestParam double latitude,
+            @RequestParam double longitude ) {
+        
+        List<AirportNearMeDTO> result = airportService.findNearMe(latitude, longitude);
+        
+        if(result.isEmpty()) {
+            //lista vazia
+            //not found devolve 404
+            return ResponseEntity.notFound().build();
+            
+        }else {
+            //tem dados
             //ok devolve 200
             return ResponseEntity.ok(result);
         }

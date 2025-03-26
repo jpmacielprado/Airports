@@ -6,8 +6,11 @@ package local.jotape.airports.service;
 
 import local.jotape.airports.repositories.AirportRepository;
 import java.util.List;
+import static java.util.stream.Collectors.toList;
 import local.jotape.airports.DTO.AirportMinDTO;
+import local.jotape.airports.DTO.AirportNearMeDTO;
 import local.jotape.airports.entities.Airport;
+import local.jotape.airports.projections.AirportNearMeProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,4 +62,20 @@ public class AirportService {
             Airport result = airportRepository.findByIataCode(iataCode);
             return result;
         }
-}
+        
+        /**
+         * Reotrna DTO AirportNearMe
+         * 
+         * @param latitude
+         * @param longitude
+         * @return
+         */
+        public List<AirportNearMeDTO> findNearMe(double latitude, double longitude) {
+            List<AirportNearMeProjection> resultNearAirports =  airportRepository.findNearMe(latitude, longitude);
+            
+            List<AirportNearMeDTO> resultDTO = resultNearAirports.stream()
+                    .map(x -> new AirportNearMeDTO(x)).toList();
+                    
+                    return resultDTO;
+        }
+}   
